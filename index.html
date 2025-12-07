@@ -131,6 +131,33 @@
             color: #aaa;
             text-shadow: 0 2px 8px rgba(100, 255, 218, 0.2);
         }
+	a {
+      text-decoration: none;
+      color: #64ffda;
+      transition: all 0.3s ease;
+    }
+    a:hover {
+      color: #fff;
+      background: rgba(100, 255, 218, 0.1);
+      text-shadow: 0 0 8px rgba(100, 255, 218, 0.5);
+      transform: translateY(-2px);
+    }
+    /* 社交链接单独样式（覆盖通用样式） */
+    .social-links a {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(100, 255, 218, 0.05);
+      color: #ccc;
+    }
+    .social-links a:hover {
+      color: #64ffda;
+      background: rgba(100, 255, 218, 0.15);
+      transform: scale(1.1) translateY(-3px);
+    }
     </style>
     <!-- 引入图标库 -->
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -148,20 +175,25 @@
         </p>
         
         <!-- 详细信息列表（带抬起效果） -->
-        <ul class="info-list">
-            <li><i class="fa-solid fa-calendar"></i> 生日：12-31（记得送我生日礼物）</li>
-            <li><i class="fa-solid fa-location-dot"></i> 在招笑的路上</li>
-            <li><i class="fa-solid fa-gamepad"></i> 喵喵喵，想玩mc吗</li>
-            <li><i class="fa-solid fa-code"><a href</i> 工具的箱 </li>
-            <li><i class="fa-solid fa-envelope"></i> 加我加我 </li>
-        </ul>
-        
-        <!-- 社交链接 -->
-        <div class="social-links">
-            <a href="https://github.com/zhaoxiaowang-buzhaoxiao" title="GitHub"><i class="fa-brands fa-github"></i></a>
-            <a href="https://space.bilibili.com/2071619473" title="B站"><i class="fa-brands fa-bilibili"></i></a>
-            <a href="index1.html" title="QQ"><i class="fa-brands fa-qq"></i></a>
-        </div>
+<ul class="info-list">
+    <li><i class="fa-solid fa-calendar"></i> 生日：12-31（记得送我生日礼物）</li>
+    <li><i class="fa-solid fa-location-dot"></i> 在招笑的路上</li>
+    <li><i class="fa-solid fa-gamepad"></i><a href="mc.html"> 喵喵喵，想玩mc吗 </a></li>
+    <li><i class="fa-solid fa-code"></i><a href="box.html" target="_blank"> 工具的箱 </a></li>
+    <li><i class="fa-solid fa-envelope"></i> 加我加我 </li>
+</ul>
+
+<!-- 社交链接 -->
+<div class="social-links">
+    <a href="https://github.com/zhaoxiaowang-buzhaoxiao" title="GitHub" target="_blank"><i class="fa-brands fa-github"></i></a>
+    <a href="https://space.bilibili.com/2071619473" title="B站" target="_blank"><i class="fa-brands fa-bilibili"></i></a>
+    <a href="index1.html" title="NZ" target="_blank">
+        <!-- 方式1：使用 img 标签引入 SVG 图标 -->
+        <img src="0.svg" alt="NZ 图标" style="width: 24px; height: 24px; fill: currentColor;">
+
+        </svg> 
+    </a>
+</div>
         
         <!-- 页脚（带抬起效果） -->
         <div class="footer">
@@ -170,3 +202,4 @@
     </div>
 </body>
 </html>
+
