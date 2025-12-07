@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>良心工具箱</title>
+    <!-- 引入 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入星空背景样式 -->
+    <link rel="stylesheet" href="styles/stars.css">
+    <style>
+        /* 全局样式重置与基础配置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: radial-gradient(ellipse at center, #0a0e17 0%, #050811 70%);
+            color: #e6f1ff;
+            min-height: 100vh;
+            padding: 50px 20px;
+        }
+
+        /* 页面标题 */
+        .page-title {
+            text-align: center;
+            margin-bottom: 60px;
+            color: #64ffda;
+            font-size: 3rem;
+            text-shadow: 0 0 20px rgba(100, 255, 218, 0.6);
+            letter-spacing: 3px;
+            position: relative;
+        }
+
+        .page-title::after {
+            content: '';
+            display: block;
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #64ffda, transparent);
+            margin: 15px auto 0;
+            filter: blur(1px);
+        }
+
+        /* 工具箱容器 */
+        .toolbox-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 工具卡片样式 */
+        .tool-card {
+            background: rgba(18, 25, 40, 0.4);
+            border-radius: 16px;
+            padding: 30px 20px;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, rgba(100, 255, 218, 0.1), transparent);
+            border-radius: 18px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(100, 255, 218, 0.4);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 50px rgba(100, 255, 218, 0.1);
+        }
+
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+
+        /* 工具图标 */
+        .tool-icon {
+            font-size: 2.5rem;
+            color: #64ffda;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(100, 255, 218, 0.5));
+        }
+
+        /* 工具标题 */
+        .tool-title {
+            font-size: 1.5rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* 工具描述 */
+        .tool-desc {
+            color: #a8b2d1;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        /* 工具作者 */
+        .tool-author {
+            color: #8ba3cc;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tool-author i {
+            font-size: 0.9rem;
+            color: #64ffda;
+        }
+
+        /* 工具链接按钮 */
+        .tool-link {
+            display: inline-block;
+            background: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+        }
+
+        .tool-link:hover {
+            background: rgba(100, 255, 218, 0.2);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
+            border-color: #64ffda;
+        }
+
+        /* 分类标题 */
+        .category-title {
+            grid-column: 1 / -1;
+            color: #a4d4ff;
+            font-size: 1.8rem;
+            margin: 40px 0 20px;
+            padding-left: 15px;
+            border-left: 3px solid #64ffda;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.2rem;
+            }
+
+            .toolbox-container {
+                gap: 20px;
+            }
+
+            .tool-card {
+                padding: 25px 15px;
+            }
+
+            .category-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .tool-icon {
+                font-size: 2rem;
+            }
+
+            .tool-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+    <!-- 配置 SVG Favicon -->
+    <link rel="icon" href="0.svg" type="image/svg+xml">
+</head>
+<body>
+    <!-- 星空背景容器 -->
+    <div class="simple-stars" id="simpleStars"></div>
+
+    <!-- 页面标题 -->
+    <h1 class="page-title">良心工具箱</h1>
+
+    <!-- 工具箱容器 -->
+    <div class="toolbox-container">
+        <!-- 编程OJ分类 -->
+        <h2 class="category-title"><i class="fa-solid fa-code"></i> 编程OJ平台</h2>
+
+        <!-- 洛谷 -->
+        <div class="tool-card">
+            <div class="tool-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <h3 class="tool-title">洛谷</h3>
+            <p class="tool-desc">知名编程竞赛平台，提供海量题库、在线比赛、学习资源，适配NOIP、ICPC等竞赛备战。</p>
+            <p class="tool-author"><i class="fa-solid fa-user"></i> 官方出品</p>
+            <a href="https://www.luogu.com.cn/" target="_blank" class="tool-link"><i class="fa-solid fa-external-link"></i> 访问平台</a>
+        </div>
+
+        <!-- 信息学奥赛一本通 -->
+        <div class="tool-card">
+            <div class="tool-icon"><i class="fa-solid fa-book-open"></i></div>
+            <h3 class="tool-title">信息学奥赛一本通</h3>
+            <p class="tool-desc">GESP等级考试专用在线评测系统，覆盖1-8级题库，适合编程入门到进阶学习。</p>
+            <p class="tool-author"><i class="fa-solid fa-user"></i> zhaoyuhang1231</p>
+            <a href="http://ybt.ssoier.cn:8088/" target="_blank" class="tool-link"><i class="fa-solid fa-external-link"></i> 访问平台</a>
+        </div>
+
+        <!-- 红城编程 -->
+        <div class="tool-card">
+            <div class="tool-icon"><i class="fa-solid fa-server"></i></div>
+            <h3 class="tool-title">红城编程</h3>
+            <p class="tool-desc">编程学习与评测平台，提供编程练习、竞赛模拟等功能，助力编程能力提升。</p>
+            <p class="tool-author"><i class="fa-solid fa-user"></i> 官方出品</p>
+            <a href="http://43.138.208.246" target="_blank" class="tool-link"><i class="fa-solid fa-external-link"></i> 访问平台</a>
+        </div>
+
+        <!-- 多媒体工具分类 -->
+        <h2 class="category-title"><i class="fa-solid fa-photo-film"></i> 多媒体工具</h2>
+
+        <!-- 良心图片压缩 -->
+        <div class="tool-card">
+            <div class="tool-icon"><i class="fa-solid fa-compress"></i></div>
+            <h3 class="tool-title">良心图片压缩</h3>
+            <p class="tool-desc">完全免费的在线图片压缩工具，支持JPG、PNG、GIF格式，无损/有损压缩可选。</p>
+            <p class="tool-author"><i class="fa-solid fa-user"></i> 官方出品</p>
+            <a href="http://v.yalijuda.com:32723/%e5%9b%be%e7%89%87%e5%8e%8b%e7%bc%a9-%e5%89%af%e6%9c%ac-2/" target="_blank" class="tool-link"><i class="fa-solid fa-external-link"></i> 立即使用</a>
+        </div>
+
+        <!-- 良心AI绘画 -->
+        <div class="tool-card">
+            <div class="tool-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <h3 class="tool-title">良心AI绘画</h3>
+            <p class="tool-desc">AI图像生成工具，登录后即可使用，支持生成各类创意图片，操作简单高效。</p>
+            <p class="tool-author"><i class="fa-solid fa-user"></i> 官方出品</p>
+            <a href="https://draw.t4wefan.pub/" target="_blank" class="tool-link"><i class="fa-solid fa-external-link"></i> 立即使用</a>
+        </div>
+
+        <!-- B站视频下载 -->
+        <div class="tool-card">
+            <div class="tool-icon"><i class="fa-solid fa-download"></i></div>
+            <h3 class="tool-title">哔哩哔哩下载</h3>
+            <p class="tool-desc">支持B站视频批量下载、字幕提取、格式转换，提供浏览器插件和桌面客户端。</p>
+            <p class="tool-author"><i class="fa-solid fa-user"></i> SnapAny</p>
+            <a href="https://snapany.com/zh/bilibili" target="_blank" class="tool-link"><i class="fa-solid fa-external-link"></i> 立即使用</a>
+        </div>
+
+        <!-- 娱乐资源分类 -->
+        <h2 class="category-title"><i class="fa-solid fa-film"></i> 娱乐资源</h2>
+
+        <!-- 火影忍者 -->
+        <div class="tool-card">
+            <div class="tool-icon"><i class="fa-solid fa-tv"></i></div>
+            <h3 class="tool-title">火影忍者</h3>
+            <p class="tool-desc">经典动漫《火影忍者》全集在线观看，高清画质，完整剧集收录，回忆青春热血。</p>
+            <p class="tool-author"><i class="fa-solid fa-user"></i> 官方出品</p>
+            <a href="https://www.zj-motor.com.cn/voddetail/29829.html" target="_blank" class="tool-link"><i class="fa-solid fa-external-link"></i> 立即观看</a>
+        </div>
+
+        <!-- 音乐资源 -->
+        <div class="tool-card">
+            <div class="tool-icon"><i class="fa-solid fa-music"></i></div>
+            <h3 class="tool-title">免费音乐</h3>
+            <p class="tool-desc">免费音乐在线聆听平台，提供海量音乐资源，无广告干扰，畅享听觉盛宴。</p>
+            <p class="tool-author"><i class="fa-solid fa-user"></i> 官方出品</p>
+            <a href="http://www.openyyy.com" target="_blank" class="tool-link"><i class="fa-solid fa-external-link"></i> 立即聆听</a>
+        </div>
+    </div>
+
+    <script>
+        // ========== 动态生成星星 ==========
+        const starsContainer = document.getElementById('simpleStars');
+        const starCount = 300; // 星星总数
+        const starSizes = ['small', 'medium', 'large', 'giant']; // 尺寸类名
+        const starColors = ['', 'blue', 'purple']; // 颜色类名（空为白色）
+        const twinkleTypes = ['twinkle', 'twinkleFast', 'twinkleSlow']; // 闪烁类型
+
+        // 生成普通星星
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            
+            // 随机选择尺寸、颜色、闪烁类型
+            const randomSize = starSizes[Math.floor(Math.random() * starSizes.length)];
+            const randomColor = starColors[Math.floor(Math.random() * starColors.length)];
+            const randomTwinkle = twinkleTypes[Math.floor(Math.random() * twinkleTypes.length)];
+            
+            star.classList.add(randomSize);
+            if (randomColor) star.classList.add(randomColor);
+
+            // 随机位置、动画时长、延迟
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const twinkleDuration = randomTwinkle === 'twinkleFast' ? (Math.random() * 2 + 1) : 
+                                    randomTwinkle === 'twinkleSlow' ? (Math.random() * 8 + 4) : 
+                                    (Math.random() * 3 + 2);
+            const moveDuration = Math.random() * 40 + 20;
+            const delay = Math.random() * 10;
+
+            // 应用样式和动画
+            star.style.cssText = `
+                left: ${x}%;
+                top: ${y}%;
+                animation: 
+                    ${randomTwinkle} ${twinkleDuration}s infinite ease-in-out,
+                    moveUp ${moveDuration}s linear ${delay}s infinite;
+            `;
+
+            starsContainer.appendChild(star);
+        }
+
+        // ========== 动态生成流星（定时） ==========
+        function createShootingStar() {
+            const shootingStar = document.createElement('div');
+            shootingStar.classList.add('shooting-star');
+            
+            // 随机初始位置（屏幕左侧/顶部）
+            const startX = Math.random() * -50;
+            const startY = Math.random() * 50;
+            
+            shootingStar.style.cssText = `
+                left: ${startX}px;
+                top: ${startY}px;
+            `;
+
+            starsContainer.appendChild(shootingStar);
+
+            // 流星动画结束后移除元素，避免DOM堆积
+            shootingStar.addEventListener('animationend', () => {
+                shootingStar.remove();
+            });
+        }
+
+        // 每隔5-10秒生成一颗流星
+        setInterval(createShootingStar, Math.random() * 5000 + 5000);
+        // 页面加载时立即生成一颗流星
+        createShootingStar();
+    </script>
+</body>
+</html>
